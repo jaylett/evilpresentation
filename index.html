@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Make your Evil Presentation today</title>
+    <link rel='stylesheet' type='text/css' href='/assets/style.css'>
+  </head>
+
+  <body>
+    <h1>Evil Presentations</h1>
+
+<h2>Jump right in</h2>
+
+<p>Do you want to <a href='presentation'>make a presentation</a>?</p>
+
+<h2>Experimental funkiness</h2>
+
+<p>This probably won't work.</p>
+
+<form method='POST' action='/presentation'>
+<input type='submit' value='Make me some evil'>
+</form>
+
+<h2>About <em>evilpresentation</em></h2>
+
+<p>
+Why bother spending ages choosing and formatting slides for that big presentation when the power of the internet (mostly monkeys on speed) can do it for you? <em>evilpresentation</em> pulls photos from <a href='http://flickr.com'>Flickr</a> tagged appropriately, and builds a presentation out of them.
+</p>
+
+<p>
+Or, why not substitute a rival's presentation for an evil one at the last minute? Just another weapon in your sneaky arsenal against those hard-working fast-climbers.
+</p>
+
+<h2>The gritty details</h2>
+
+<p>If you want it more customised, you can add in additional information such as your name and affiliation, and the title of your presentation. This goes into the URI itself; the following are accepted.</p>
+
+<ul>
+<li><code>http://evilpresentation.com/presentation/<em>[author]</em></code></li>
+<li><code>http://evilpresentation.com/presentation/<em>[author]</em>;<em>[affiliation]</em></code></li>
+<li><code>http://evilpresentation.com/presentation/<em>[author]</em>;<em>[affiliation]</em>/<em>[title]</em></code></li>
+</ul>
+
+<p>We use Flickr &quot;machine tags&quot; to identify the images available. You should tag possible opening images with <code>evil:purpose=start</code>, general-purpose images with <code>evil:purpose=middle</code>, and ending photos with <code>evil:purpose=end</code>. All photos should have a <a href='http://creativecommons.org'>Creative Commons</a> license that allows commercial use. You will be attributed in a presentation for any images used.</p>
+
+<h2>Status</h2>
+
+<p>
+This is very much pre-release, so please do not spread around yet. In particular, there's an approach I want to take which will reduce the load on Flickr and also make the final presentations bookmarkable.
+</p>
+
+    <address><a href='/'>evilpresentation</a> is a product of <a href='http://evilmediagroup.com/'>evilmediagroup</a>.</address>
+  </body>
+</html>
