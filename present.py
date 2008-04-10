@@ -15,4 +15,4 @@ api_key = '724e7d87e4cda750215d7c9e192adee3'
 
 f = Flickr.Flickr(api_key)
 c = Cgi.Driver(f, install_dir)
-c.do_get()
+c.process_request()
