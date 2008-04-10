@@ -9,6 +9,8 @@ evilpresentations' CGI driver.
 import Flickr, cgi, cgitb, os, time, urllib
 from jinja import Template, Context, FileSystemLoader
 
+assets_version = 1
+
 class CgiError(Exception):
     def __init__(self, message):
         self.message = message
@@ -163,6 +165,7 @@ class Driver:
             if not src_uri in credits:
                 credits.append(src_uri)
         metadata['credits'] = credits
+        metadata['assetpath'] = '/assets/%i' % assets_version
 
         tmpl = Template('presentation', FileSystemLoader(self.install_dir))
         c = Context(metadata)
