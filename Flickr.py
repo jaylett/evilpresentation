@@ -45,9 +45,7 @@ class Flickr:
         for photo in photos:
             if photo.tag!='photo':
                 next
-            photo_uri = 'http://farm%s.static.flickr.com/%s/%s_%s.jpg' % (photo.get('farm'), photo.get('server'), photo.get('id'), photo.get('secret'))
-            user_uri = 'http://flickr.com/people/%s/' % photo.get('owner')
-            res.append([photo_uri, photo.get('title'), user_uri])
+            res.append([photo.get('id'), photo.get('farm'), photo.get('server'), photo.get('secret'), photo.get('owner')])
         return res
 
     def call_api(self, call, args):

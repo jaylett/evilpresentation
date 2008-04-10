@@ -9,6 +9,22 @@ evilpresentations' CGI driver.
 import Flickr, cgi, cgitb, os, time, urllib
 from jinja import Template, Context, FileSystemLoader
 
+class CgiError(Exception):
+    def __init__(self, message):
+        self.message = message
+
+    def __str__(self):
+        return self.message
+
+def quote_pro(s):
+    s = s.replace('/', '__')
+    s = urllib.quote_plus(s)
+    return s
+
+def unquote_pro(s):
+    s = s.replace('__', '/')
+    return urllib.unquote_plus(s)
+
 class Driver:
     """evilpresentations' CGI driver; initialise with a Flickr object."""
     def __init__(self, flickr, install_dir):
@@ -24,7 +40,7 @@ class Driver:
         p = os.environ.get('PATH_INFO', '')
 
         p = p.split('/')
-        p = map(lambda x: urllib.unquote_plus(x), p)
+        p = map(lambda x: unquote_pro(x), p)
 
         if method=='GET':
             self.do_get(p)
@@ -88,32 +104,69 @@ class Driver:
         try:
             title = p[1]
         except IndexError:
-            title = dateline
-            dateline = ''
+            title = 'Presentation'
 
-        return {'dateline': dateline, 'title': title, 'presenter': presenter, 'affiliation': affiliation}
+        result = {'dateline': dateline, 'title': title, 'presenter': presenter, 'affiliation': affiliation}
+
+        if len(p)>2:
+            ps = p[2:]
+            photos = []
+            for photo in ps:
+                pb = photo.split(';')
+                if len(pb)!=5:
+                    raise CgiError("Look, you can't just make up URIs, okay? There are *rules*.")
+                (id, farm, server, secret, owner) = pb
+                photo_uri = 'http://farm%s.static.flickr.com/%s/%s_%s.jpg' % (farm, server, id, secret)
+                user_uri = 'http://flickr.com/people/%s/' % owner
+                photos.append([photo_uri, user_uri, id, farm, server, secret, owner])
+            result['photos'] = photos
+
+        return result
 
     def make_presentation(self, p):
         photos = self._get_photos(p)
+
+        def fixup_photo_array(p):
+            photo_uri = 'http://farm%s.static.flickr.com/%s/%s_%s.jpg' % (p[1], p[2], p[0], p[3])
+            user_uri = 'http://flickr.com/people/%s/' % p[4]
+            res = [photo_uri, user_uri]
+            res.extend(p)
+            return res
+
+        photos = map(fixup_photo_array, photos)
+        
         metadata = self._extract_metadata(p)
         metadata['photos'] = photos
 
-        print "Status: 201 Yeah, I've done it already"
+        print "Status: 302 Almost there..."
         print "Location: " + self._make_uri(metadata)
         print
 
     def _make_uri(self, metadata):
-        # FIXME
-        return '/wibble'
+        uri = '/presentation/' + quote_pro(metadata['presenter'])
+        uri = uri + ';' + quote_pro(metadata['affiliation'])
+        uri = uri + '/' + quote_pro(metadata['title'])
+        for photo in metadata['photos']:
+            uri += '/' + quote_pro(photo[2]) + ';' + quote_pro(photo[3])
+            uri += ';' + quote_pro(photo[4]) + ';' + quote_pro(photo[5])
+            uri += ';' + quote_pro(photo[6])
+        
+        return uri
 
     def do_presentation(self, p):
-        # FIXME: cope with whatever _make_uri returns
-        photos = self._get_photos(p)
         metadata = self._extract_metadata(p)
-        metadata['photos'] = photos
+
+        credits = []
+        src_uris = map(lambda x: x[1], metadata['photos'])
+        src_uris.sort()
+        for src_uri in src_uris:
+            if not src_uri in credits:
+                credits.append(src_uri)
+        metadata['credits'] = credits
 
         tmpl = Template('presentation', FileSystemLoader(self.install_dir))
         c = Context(metadata)
         print "Content-Type: text/html; charset=utf-8"
+        print "Cache-Control: max-age=86400" # let it go a day...
         print
         print tmpl.render(c)

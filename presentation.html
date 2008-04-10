@@ -37,16 +37,17 @@
 {% for photo in photos %}
 <div class='slide'>
 <p style="text-align: center;">
-<img src='{{ photo.0 }}' title='{{ photo.1 }}'>
+<img src='{{ photo.0 }}' alt=''>
 </p>
-<div class='handout'>Credit: {{ photo.2 }}</div>
+<div class='handout'>Credit: {{ photo.1 }}</div>
 </div>
 {% endfor %}
 
 <div class='slide'>
+<h2>Image credits</h2>
 <ul>
-{% for photo in photos %}
-<li>{{ photo.1 }} from {{ photo.2 }}</li>
+{% for credit in credits %}
+<li>{{ credit }}</li>
 {% endfor %}
 </ul>
 </div>
