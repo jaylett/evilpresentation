@@ -9,9 +9,9 @@ install_dir = '/home/james/projects/sja/evilpresentation'
 import sys
 sys.path.append(install_dir)
 
-import Flickr, Cgi
+import Flickr, Cgi, Config
 
-api_key = '724e7d87e4cda750215d7c9e192adee3'
+api_key = Config.api_key
 
 f = Flickr.Flickr(api_key)
 c = Cgi.Driver(f, install_dir)
