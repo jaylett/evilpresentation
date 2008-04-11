@@ -50,8 +50,10 @@ class Driver:
             self.do_post(p)
         else:
             print "Status: 405 No, that ain't gonna work"
-            # FIXME: should detect if POST is allowed...
-            print "Allow: GET"
+            if p[1]=='presentation':
+                print "Allow: GET,POST"
+            else:
+                print "Allow: GET"
             print
 
     def do_post(self, p):
