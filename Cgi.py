@@ -79,7 +79,7 @@ class Driver:
         c = Context({'assetpath': '/assets/%i' % assets_version})
         print "Content-Type: text/html; charset=utf-8"
         print
-        print tmpl.render(c)
+        print tmpl.render(c).encode('utf-8')
 
     def _get_photos(self, p):
         start = self.flickr.get_photos('start')
@@ -105,19 +105,21 @@ class Driver:
     def _extract_metadata(self, p):
         affiliation = ''
 
+        # presenter, affiliation, title are UTF-8 encoded, using
+        # RFC 3987 section 3.1 (as I understand it).
         try:
-            presenter = p[0]
+            presenter = p[0].decode('utf-8')
             presenter = presenter.split(';')
             if len(presenter)>1:
                 affiliation = presenter[1]
             presenter = presenter[0]
         except IndexError:
-            presenter = ''
+            presenter = u''
         dateline = time.strftime('%A %B %d, %Y')
         try:
-            title = p[1]
+            title = p[1].decode('utf-8')
         except IndexError:
-            title = 'Presentation'
+            title = u'Presentation'
 
         result = {'dateline': dateline, 'title': title, 'presenter': presenter, 'affiliation': affiliation}
 
@@ -182,4 +184,4 @@ class Driver:
             print "Cache-Control: no-cache, must-revalidate, private"
             print "Pragma: no-cache"
         print
-        print tmpl.render(c)
+        print tmpl.render(c).encode('utf-8')
