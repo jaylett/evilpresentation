@@ -74,7 +74,7 @@ class Driver:
 
     def do_index(self):
         tmpl = Template('index', FileSystemLoader(self.install_dir))
-        c = Context()
+        c = Context({'assetpath': '/assets/%i' % assets_version})
         print "Content-Type: text/html; charset=utf-8"
         print
         print tmpl.render(c)
@@ -88,6 +88,15 @@ class Driver:
         photos.extend(start)
         photos.extend(middle)
         photos.extend(end)
+
+        def fixup_photo_array(p):
+            photo_uri = 'http://farm%s.static.flickr.com/%s/%s_%s.jpg' % (p[1], p[2], p[0], p[3])
+            user_uri = 'http://flickr.com/people/%s/' % p[4]
+            res = [photo_uri, user_uri]
+            res.extend(p)
+            return res
+
+        photos = map(fixup_photo_array, photos)
 
         return photos
 
@@ -127,16 +136,6 @@ class Driver:
 
     def make_presentation(self, p):
         photos = self._get_photos(p)
-
-        def fixup_photo_array(p):
-            photo_uri = 'http://farm%s.static.flickr.com/%s/%s_%s.jpg' % (p[1], p[2], p[0], p[3])
-            user_uri = 'http://flickr.com/people/%s/' % p[4]
-            res = [photo_uri, user_uri]
-            res.extend(p)
-            return res
-
-        photos = map(fixup_photo_array, photos)
-        
         metadata = self._extract_metadata(p)
         metadata['photos'] = photos
 
@@ -157,6 +156,11 @@ class Driver:
 
     def do_presentation(self, p):
         metadata = self._extract_metadata(p)
+        if metadata.has_key('photos'):
+            cacheable = True
+        else:
+            metadata['photos'] = self._get_photos(p)
+            cacheable = False
 
         credits = []
         src_uris = map(lambda x: x[1], metadata['photos'])
@@ -170,6 +174,10 @@ class Driver:
         tmpl = Template('presentation', FileSystemLoader(self.install_dir))
         c = Context(metadata)
         print "Content-Type: text/html; charset=utf-8"
-        print "Cache-Control: max-age=86400" # let it go a day...
+        if cacheable:
+            print "Cache-Control: max-age=86400" # let it go a day...
+        else:
+            print "Cache-Control: no-cache, must-revalidate, private"
+            print "Pragma: no-cache"
         print
         print tmpl.render(c)

@@ -11,10 +11,10 @@
 <h2>Jump right in</h2>
 
 <form method='POST' action='/presentation'>
-<input type='submit' value='Make me some evil'>
+<p>Would you like to <input type='submit' value='make an evil presentation'>? Or perhaps you would prefer to a bookmark <a href='/presentation'>a random presentation</a> (so the images will be different each time).</p>
 </form>
 
-<h2>About <em>evilpresentation</em></h2>
+<h2>About evil presentations</h2>
 
 <p>
 Why bother spending ages choosing and formatting slides for that big presentation when the power of the internet (mostly monkeys on speed) can do it for you? <em>evilpresentation</em> pulls photos from <a href='http://flickr.com'>Flickr</a> tagged appropriately, and builds a presentation out of them.
@@ -26,7 +26,7 @@ Or, why not substitute a rival's presentation for an evil one at the last minute
 
 <h2>The gritty details</h2>
 
-<p>If you want it more customised, you can add in additional information such as your name and affiliation, and the title of your presentation. This goes into the URI itself; the following are accepted. Note that you need to <code>POST</code> to the following URIs, and will get a redirect to the final (cacheable) URI for your generated presentation.</p>
+<p>If you want it more customised, you can add in additional information such as your name and affiliation, and the title of your presentation. This goes into the URI itself; the following are accepted. If you <code>POST</code> to the following URIs, you will get a redirect to the final (cacheable) URI for your generated presentation; if you use <code>GET</code> then the URI won't redirect, and won't be cacheable (but has the advantage of using randomly-selected images each time).</p>
 
 <ul>
 <li><code>http://evilpresentation.com/presentation/<em>[author]</em></code></li>
@@ -39,9 +39,9 @@ Or, why not substitute a rival's presentation for an evil one at the last minute
 <h2>Status</h2>
 
 <p>
-This is very much pre-release, so please do not spread around yet.
+This is very much pre-release, so please do not spread around yet. I'd really like to get the body of <code>POST</code> to mean something, probably by containing some <code>application/x-www-form-urlencoded</code> data. I really need to think about IRIs as well.
 </p>
 
-    <address><a href='/'>evilpresentation</a> is a product of <a href='http://evilmediagroup.com/'>evilmediagroup</a>.</address>
+    <address><a href='/'>evilpresentation.com</a> is a product of <a href='http://evilmediagroup.com/'>evilmediagroup</a>. Presentation system adapted from <a href='http://meyerweb.com/eric/tools/s5/'>S5</a> by <a href='http://meyerweb.com/eric/'>Eric Meyer</a>.</address>
   </body>
 </html>
