@@ -81,10 +81,12 @@ class Driver:
         print
         print tmpl.render(c).encode('utf-8')
 
-    def _get_photos(self, p):
-        start = self.flickr.get_photos('start')
-        middle = self.flickr.get_photos('middle', 8)
-        end = self.flickr.get_photos('end')
+    def _get_photos(self, config=None):
+        if config==None:
+            config = { 'start': 1, 'middle': 8, 'end': 1 }
+        start = self.flickr.get_photos('start', config['start'])
+        middle = self.flickr.get_photos('middle', config['middle'])
+        end = self.flickr.get_photos('end', config['end'])
 
         photos = []
         photos.extend(start)
@@ -102,8 +104,17 @@ class Driver:
 
         return photos
 
-    def _extract_metadata(self, p):
-        affiliation = ''
+    def _extract_metadata(self, p, read_post_data=False):
+        title = u'Presentation'
+        presenter = u''
+        affiliation = u''
+
+        result = {'title':u'Presentation', 'presenter':u'', 'affiliation': u''}
+
+        if read_post_data:
+            form = cgi.FieldStorage(keep_blank_values=False)
+            for k in form.keys():
+                result[k] = ", ".join(form.getlist(k))
 
         # presenter, affiliation, title are UTF-8 encoded, using
         # RFC 3987 section 3.1 (as I understand it).
@@ -111,17 +122,16 @@ class Driver:
             presenter = p[0].decode('utf-8')
             presenter = presenter.split(';')
             if len(presenter)>1:
-                affiliation = presenter[1]
-            presenter = presenter[0]
+                result['affiliation'] = presenter[1]
+            result['presenter'] = presenter[0]
         except IndexError:
-            presenter = u''
-        dateline = time.strftime('%A %B %d, %Y')
+            pass
         try:
-            title = p[1].decode('utf-8')
+            result['title'] = p[1].decode('utf-8')
         except IndexError:
-            title = u'Presentation'
-
-        result = {'dateline': dateline, 'title': title, 'presenter': presenter, 'affiliation': affiliation}
+            pass
+        # FIXME: could allow overriding this in post data
+        result['dateline'] = time.strftime('%A %B %d, %Y')
 
         if len(p)>2:
             ps = p[2:]
@@ -139,8 +149,17 @@ class Driver:
         return result
 
     def make_presentation(self, p):
-        photos = self._get_photos(p)
-        metadata = self._extract_metadata(p)
+        metadata = self._extract_metadata(p, True)
+        config = {}
+        for k in metadata.keys():
+            if k.startswith('images.'):
+                try:
+                    config[k[7:]] = int(metadata[k])
+                except ValueError:
+                    pass
+        if len(config)==0:
+            config=None
+        photos = self._get_photos(config)
         metadata['photos'] = photos
 
         print "Status: 302 Almost there..."
@@ -163,7 +182,7 @@ class Driver:
         if metadata.has_key('photos'):
             cacheable = True
         else:
-            metadata['photos'] = self._get_photos(p)
+            metadata['photos'] = self._get_photos()
             cacheable = False
 
         credits = []
