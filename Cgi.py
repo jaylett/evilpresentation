@@ -114,20 +114,25 @@ class Driver:
         if read_post_data:
             form = cgi.FieldStorage(keep_blank_values=False)
             for k in form.keys():
-                result[k] = ", ".join(form.getlist(k))
+                r =  ", ".join(form.getlist(k))
+                if r!='':
+                    result[k] = r
 
         # presenter, affiliation, title are UTF-8 encoded, using
         # RFC 3987 section 3.1 (as I understand it).
         try:
             presenter = p[0].decode('utf-8')
             presenter = presenter.split(';')
-            if len(presenter)>1:
+            if len(presenter)>1 and presenter[1]!='':
                 result['affiliation'] = presenter[1]
-            result['presenter'] = presenter[0]
+            if presenter[0]!='':
+                result['presenter'] = presenter[0]
         except IndexError:
             pass
         try:
-            result['title'] = p[1].decode('utf-8')
+            r = p[1].decode('utf-8')
+            if r!='':
+                result['title'] = r
         except IndexError:
             pass
         # FIXME: could allow overriding this in post data
