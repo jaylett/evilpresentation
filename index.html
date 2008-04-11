@@ -14,6 +14,18 @@
 <p>Would you like to <input type='submit' value='make an evil presentation'>? Or perhaps you would prefer to a bookmark <a href='/presentation'>a random presentation</a> (so the images will be different each time).</p>
 </form>
 
+<h2>Customise your presentation</h2>
+
+<form method='POST' action='/presentation' enctype='multipart/form-data' accept-charset='utf-8'>
+<label for='presenter'>Presenter</label> <input id='presenter' name='presenter'><br>
+<label for='affiliation'>Affiliation</label> <input id='affiliation' name='affiliation'><br>
+<label for='title'>Title</label> <input id='title' name='title'><br>
+<label for='start'>Start images</label> <input id='start' name='images.start' value='1'><br>
+<label for='middle'>Middle images</label> <input id='middle' name='images.middle' value='4'><br>
+<label for='end'>End images</label> <input id='end' name='images.end' value='1'><br>
+<input type='submit' value='Make a customised presentation'>
+</form>
+
 <h2>About evil presentations</h2>
 
 <p>
@@ -24,9 +36,9 @@ Why bother spending ages choosing and formatting slides for that big presentatio
 Or, why not substitute a rival's presentation for an evil one at the last minute? Just another weapon in your sneaky arsenal against those hard-working fast-climbers.
 </p>
 
-<h2>The gritty details</h2>
+<h2>More sophistication</h2>
 
-<p>If you want it more customised, you can add in additional information such as your name and affiliation, and the title of your presentation. This goes into the URI itself; the following are accepted. If you <code>POST</code> to the following URIs, you will get a redirect to the final (cacheable) URI for your generated presentation; if you use <code>GET</code> then the URI won't redirect, and won't be cacheable (but has the advantage of using randomly-selected images each time).</p>
+<p>You can add in additional information such as your name and affiliation, and the title of your presentation, into the URI itself (allowing bookmarking these details while keeping the images random each time); the following are accepted.</p>
 
 <ul>
 <li><code>http://evilpresentation.com/presentation/<em>[author]</em></code></li>
@@ -34,13 +46,13 @@ Or, why not substitute a rival's presentation for an evil one at the last minute
 <li><code>http://evilpresentation.com/presentation/<em>[author]</em>;<em>[affiliation]</em>/<em>[title]</em></code></li>
 </ul>
 
+<p>If you <code>POST</code> to these, you will get a redirect to the final (cacheable) URI for your generated presentation; if you use <code>GET</code> then the presentation will be returned directly, and won't be cacheable (but has the advantage of using randomly-selected images each time).</p>
+
+<p><code>POST</code> requests also parse the supplied entity, which should be of type <code>multipart/form-data</code> (to ensure non-ASCII characters work). You can set the following fields: <code>presenter</code>, <code>affiliation</code>, <code>title</code>; and <code>images.start</code>, <code>images.middle</code> and <code>images.end</code> to select how many of each type of image you want. Configuration options provided in the URI override those in the POST request.</p>
+
+<h2>How we find images</h2>
+
 <p>We use Flickr &quot;machine tags&quot; to identify the images available. You should tag possible opening images with <code>evil:purpose=start</code>, general-purpose images with <code>evil:purpose=middle</code>, and ending images with <code>evil:purpose=end</code>. All images should have a <a href='http://creativecommons.org'>Creative Commons</a> license that allows commercial use. You will be attributed in a presentation for any images used.</p>
-
-<h2>Status</h2>
-
-<p>
-This is very much pre-release, so please do not spread around yet. I'd really like to get the body of <code>POST</code> to mean something, probably by containing some <code>application/x-www-form-urlencoded</code> data. And encrypting the Flickr gubbins might make me more popular. Oh, and using Twisted instead of CGI invocation.
-</p>
 
     <address><a href='/'>evilpresentation.com</a> is a product of <a href='http://evilmediagroup.com/'>evilmediagroup</a>. Presentation system adapted from <a href='http://meyerweb.com/eric/tools/s5/'>S5</a> by <a href='http://meyerweb.com/eric/'>Eric Meyer</a>. We feel it necessary, for contractual reasons, to point out that &quot;this product uses the <a href='http://flickr.com/services/api/'>Flickr API</a> but is not endorsed or certified by <a href='http://flickr.com/'>Flickr</a>&quot;. Just so we're clear.</address>
   </body>
