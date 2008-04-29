@@ -9,7 +9,7 @@ evilpresentations' CGI driver.
 import Flickr, cgi, cgitb, os, time, urllib
 from jinja import Template, Context, FileSystemLoader
 
-assets_version = 1
+assets_version = 2
 
 class CgiError(Exception):
     def __init__(self, message):
