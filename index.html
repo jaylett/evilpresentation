@@ -6,7 +6,17 @@
   </head>
 
   <body>
-    <h1>Evil Presentations<sup><a href='#compatibility'>1</a></sup></h1>
+    <h1>Evil Presentation: your source for evil, in a business context<sup><a href='#compatibility'>1</a></sup></h1>
+
+<div id='GETSTARTED'>
+<h2>Jump right in</h2>
+
+<form method='POST' action='/presentation'>
+<p>Would you like to <input class='button-as-link' type='submit' value='make an evil presentation'>? Or perhaps you would prefer to a bookmark <a href='/presentation'>a random presentation</a> (so the images will be different each time). Once it starts, try clicking it, or whacking your <kbd>spacebar</kbd> or something.</p>
+</form>
+    </div>
+
+<div class='section'>
 <h2>About evil presentations</h2>
 
 <p>
@@ -17,25 +27,35 @@ Why bother spending ages choosing and formatting slides for that big presentatio
 Or, why not substitute a rival's presentation for an evil one at the last minute? Just another weapon in your sneaky arsenal against those hard-working fast-climbers.
 </p>
 
-
-<h2>Jump right in</h2>
-
-<form method='POST' action='/presentation'>
-<p>Would you like to <input type='submit' value='make an evil presentation'>? Or perhaps you would prefer to a bookmark <a href='/presentation'>a random presentation</a> (so the images will be different each time).</p>
-</form>
-
 <h2>Customise your presentation</h2>
 
 <form method='POST' action='/presentation' enctype='multipart/form-data' accept-charset='utf-8'>
-<label for='presenter'>Presenter</label> <input id='presenter' name='presenter'><br>
-<label for='affiliation'>Affiliation</label> <input id='affiliation' name='affiliation'><br>
-<label for='title'>Title</label> <input id='title' name='title'><br>
-<label for='start'>Start images</label> <input id='start' name='images.start' value='1'><br>
-<label for='middle'>Middle images</label> <input id='middle' name='images.middle' value='4'><br>
-<label for='end'>End images</label> <input id='end' name='images.end' value='1'><br>
+<fieldset>
+<legend>About you</legend>
+<div>
+<label for='presenter'>Presenter</label> <input id='presenter' name='presenter'>
+<label for='affiliation'>Affiliation</label> <input id='affiliation' name='affiliation'>
+<label for='title'>Title</label> <input id='title' name='title'>
+	  </div>
+	</fieldset>
+<fieldset>
+<legend>And about those images</legend>
+<div>
+<label for='start'>Start images</label> <input id='start' name='images.start' value='1'>
+<label for='middle'>Middle images</label> <input id='middle' name='images.middle' value='4'>
+<label for='end'>End images</label> <input id='end' name='images.end' value='1'>
+	  </div>
+</fieldset>
 <input type='submit' value='Make a customised presentation'>
 </form>
 
+<h2>How we find images</h2>
+
+<p>We use Flickr &quot;machine tags&quot; to identify the images available. You should tag possible opening images with <code>evil:purpose=start</code>, general-purpose images with <code>evil:purpose=middle</code>, and ending images with <code>evil:purpose=end</code>. All images should have a <a href='http://creativecommons.org'>Creative Commons</a> license that allows commercial use. You will be attributed in a presentation for any images used.</p>
+
+</div>
+
+<div class='section'>
 <h2>More sophistication</h2>
 
 <p>You can add in additional information such as your name and affiliation, and the title of your presentation, into the URI itself (allowing bookmarking these details while keeping the images random each time); the following are accepted.</p>
@@ -50,13 +70,11 @@ Or, why not substitute a rival's presentation for an evil one at the last minute
 
 <p><code>POST</code> requests also parse the supplied entity, which should be of type <code>multipart/form-data</code> (to ensure non-ASCII characters work). You can set the following fields: <code>presenter</code>, <code>affiliation</code>, <code>title</code>; and <code>images.start</code>, <code>images.middle</code> and <code>images.end</code> to select how many of each type of image you want. Configuration options provided in the URI override those in the POST request.</p>
 
-<h2>How we find images</h2>
+    </div>
 
-<p>We use Flickr &quot;machine tags&quot; to identify the images available. You should tag possible opening images with <code>evil:purpose=start</code>, general-purpose images with <code>evil:purpose=middle</code>, and ending images with <code>evil:purpose=end</code>. All images should have a <a href='http://creativecommons.org'>Creative Commons</a> license that allows commercial use. You will be attributed in a presentation for any images used.</p>
+<h2 id='compatibility'>1: Compatibility</h2>
 
-<h2 id='compatibility'>Compatibility</h2>
-
-<p>This site should work in all browsers except Opera, which doesn't work with S5 for reasons I can't be bothered to sort out. It clearly worked at some point; I'm guessing Opera decided they'd get clever and change the way their META extensions work, so it's really their own fault.</p>
+<p>This site should work in all browsers except Opera, which doesn't work with S5 for reasons I can't be bothered to sort out. It clearly worked at some point; I'm guessing Opera decided they'd get clever and change the way their META extensions work, so it's really their own fault. The creators of <code>evilpresentation.com</code> will not offer opinions on its compatibility with your particular business.</p>
 
     <address><a href='/'>evilpresentation.com</a> is a product of <a href='http://evilmediagroup.com/'>evilmediagroup</a>. Presentation system adapted from <a href='http://meyerweb.com/eric/tools/s5/'>S5</a> by <a href='http://meyerweb.com/eric/'>Eric Meyer</a>. We feel it necessary, for contractual reasons, to point out that &quot;this product uses the <a href='http://flickr.com/services/api/'>Flickr API</a> but is not endorsed or certified by <a href='http://flickr.com/'>Flickr</a>&quot;. Just so we're clear.</address>
   </body>

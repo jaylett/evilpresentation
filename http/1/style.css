@@ -1,18 +1,109 @@
+/* Okay, I can't seriously believe you're reading this. It's
+ * horrible. Go away.
+ */
+
+HTML, DIV, H1, H2, UL, LI, P, FORM, INPUT, LABEL, A {
+  margin: 0;
+  padding: 0;
+}
+
 BODY {
   font-family: sans-serif;
+  font-size: 12pt;
+  line-height: 1.5em;
+  margin: 0;
+  padding: 0 0.5em 0 0.5em;
+  color: black;
+  background-color: white;
+}
+
+A, A:hover, A:visited {
+  color: blue;
+  text-decoration: underline;
+}
+
+H1 {
+  font-size: 200%;
+  line-height: 1.5em;
+  padding: 0 0.25em 0 0.25em;
+  margin-bottom: 1em;
+}
+
+H2 {
+  font-size: 100%;
+  line-height: 1.5em;
+}
+
+FORM P { padding: 0; } /* eww, this bit is particularly gross */
+
+H2, UL, P, FORM {
+  padding: 0 0.5em 0 0.5em;
+}
+
+H2 { clear: both; }
+
+UL {
+  list-style: disc inside;
+  padding-left: 2em;
+  margin-bottom: 1.5em;
+}
+
+P, FORM {
+  margin: 0 0 1.5em 0;
 }
 
 ADDRESS {
+  margin: 1.5em 0 0 0;
   border-top: 1px solid black;
   font-size: 80%;
+  clear: both;
 }
 
-INPUT[TYPE=SUBMIT] {
-  background-color: white;
+INPUT[TYPE=SUBMIT].button-as-link {
+  background-color: transparent;
   border: none;
   color: blue;
   text-decoration: underline;
   margin: 0;
   padding: 0;
   font-size: 100%;
+  clear: none;
+  float: none;
+}
+
+FIELDSET {
+  width: 25%;
+  float: left;
+}
+
+FIELDSET DIV {
+  width: 50%;
+  padding: 0;
+  margin: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+FIELDSET LABEL, FIELDSET INPUT {
+  display: block;
+  text-align: center;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+INPUT[TYPE=SUBMIT] {
+  clear: both;
+  float: left;
+  font-size: 100%;
+  padding: 0 0.2em 0 0.2em;
+  margin: 1.5em 0 1.5em 1em;
+}
+
+#GETSTARTED {
+  background-color: rgb(150,220,150);
+}
+
+.section {
+  background-color: rgb(220,220,220);
 }
