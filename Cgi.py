@@ -83,15 +83,11 @@ class Driver:
 
     def _get_photos(self, config=None):
         if config==None:
-            config = { 'start': 1, 'middle': 8, 'end': 1 }
-        start = self.flickr.get_photos('start', config['start'])
-        middle = self.flickr.get_photos('middle', config['middle'])
-        end = self.flickr.get_photos('end', config['end'])
+            config = { 'start': 1, 'middle': 8, 'end': 1, 'order': 'start,middle,end' }
 
         photos = []
-        photos.extend(start)
-        photos.extend(middle)
-        photos.extend(end)
+        for type in config.get('order', 'start,middle,end').split(','):
+            photos.extend(self.flickr.get_photos(type, config[type]))
 
         def fixup_photo_array(p):
             photo_uri = 'http://farm%s.static.flickr.com/%s/%s_%s.jpg' % (p[1], p[2], p[0], p[3])
@@ -138,6 +134,28 @@ class Driver:
         # FIXME: could allow overriding this in post data
         result['dateline'] = time.strftime('%A %B %d, %Y')
 
+        # If the URI has the order and number of each image type to use,
+        # set that up in the metadata dictionary.
+        if len(p)>2:
+            try:
+                if not p[2][0].isdigit():
+                    # type/number string of format <type>=<n>;...
+                    pbits = p[2].split(';')
+                    order = ''
+                    for pb in pbits:
+                        d = pb.split('=')
+                        if len(d)==1:
+                            d.append(d[0])
+                        if order!='':
+                            order = order + ','
+                        order = order + d[0]
+                        result['images.' + d[0]] = d[1]
+                    result['images.order'] = order
+                    return result
+            except:
+                pass
+
+        # If the URI has the actual photos in, use them
         if len(p)>2:
             ps = p[2:]
             photos = []
@@ -153,17 +171,24 @@ class Driver:
 
         return result
 
-    def make_presentation(self, p):
-        metadata = self._extract_metadata(p, True)
+    def _get_config_from_metadata(self, metadata):
         config = {}
         for k in metadata.keys():
             if k.startswith('images.'):
-                try:
-                    config[k[7:]] = int(metadata[k])
-                except ValueError:
-                    pass
+                if k=='images.order':
+                    config['order'] = metadata[k]
+                else:
+                    try:
+                        config[k[7:]] = int(metadata[k])
+                    except ValueError:
+                        pass
         if len(config)==0:
             config=None
+        return config
+
+    def make_presentation(self, p):
+        metadata = self._extract_metadata(p, True)
+        config = self._get_config_from_metadata(metadata)
         photos = self._get_photos(config)
         metadata['photos'] = photos
 
@@ -187,7 +212,7 @@ class Driver:
         if metadata.has_key('photos'):
             cacheable = True
         else:
-            metadata['photos'] = self._get_photos()
+            metadata['photos'] = self._get_photos(self._get_config_from_metadata(metadata))
             cacheable = False
 
         credits = []

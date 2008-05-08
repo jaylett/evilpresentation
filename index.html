@@ -51,30 +51,37 @@ Or, why not substitute a rival's presentation for an evil one at the last minute
 
 <h2>How we find images</h2>
 
-<p>We use Flickr &quot;machine tags&quot; to identify the images available. You should tag possible opening images with <code>evil:purpose=start</code>, general-purpose images with <code>evil:purpose=middle</code>, and ending images with <code>evil:purpose=end</code>. All images should have a <a href='http://creativecommons.org'>Creative Commons</a> license that allows commercial use. You will be attributed in a presentation for any images used.</p>
+<p>We use Flickr &quot;machine tags&quot; to identify the images available. You should tag possible opening images with <code>evil:purpose=start</code>, general-purpose images with <code>evil:purpose=middle</code>, and ending images with <code>evil:purpose=end</code>. All images should have a <a href='http://creativecommons.org'>Creative Commons</a> license that allows commercial use. You will be attributed in a presentation for any images used. If there aren't enough images of the type requested, only those available are used - we won't show the same image twice. Also, we'll never show more than 500 of any given type.</p>
 
 </div>
 
 <div class='section'>
 <h2>More sophistication</h2>
 
-<p>You can add in additional information such as your name and affiliation, and the title of your presentation, into the URI itself (allowing bookmarking these details while keeping the images random each time); the following are accepted.</p>
+<p>You can add in additional information such as your name and affiliation, and the title of your presentation, into the URI itself (allowing bookmarking these details while keeping the images random each time). You can also control exactly which types of images are used when.</p>
 
 <ul>
-<li><code>http://evilpresentation.com/presentation/<em>[author]</em></code></li>
-<li><code>http://evilpresentation.com/presentation/<em>[author]</em>;<em>[affiliation]</em></code></li>
-<li><code>http://evilpresentation.com/presentation/<em>[author]</em>;<em>[affiliation]</em>/<em>[title]</em></code></li>
+<li>http://evilpresentation.com/presentation/<var>author</var></li>
+<li>http://evilpresentation.com/presentation/<var>author</var>;<var>affiliation</var></li>
+<li>http://evilpresentation.com/presentation/<var>author</var>;<var>affiliation</var>/<var>title</var></li>
+<li>http://evilpresentation.com/presentation/<var>author</var>;<var>affiliation</var>/<var>title</var>/<var>images-configuration</var></li>
 </ul>
+
+<p>The <var>images-configuration</var> is in the form <span><var>type</var>=<var>number</var>;<var>type</var>=<var>number</var>,&hellip;</span>. For instance, <kbd>start=1;middle=6;detail=2;end=1</kbd> would choose one <code>evil:purpose=start</code> image followed by six <code>evil:purpose=middle</code> images, two <code>evil:purpose=detail</code> images and finally one <code>evil:purpose=end</code>. (We have only provided <em>start</em>, <em>middle</em> and <em>end</em> images so far.)</p>
 
 <p>If you <code>POST</code> to these, you will get a redirect to the final (cacheable) URI for your generated presentation; if you use <code>GET</code> then the presentation will be returned directly, and won't be cacheable (but has the advantage of using randomly-selected images each time).</p>
 
-<p><code>POST</code> requests also parse the supplied entity, which should be of type <code>multipart/form-data</code> (to ensure non-ASCII characters work). You can set the following fields: <code>presenter</code>, <code>affiliation</code>, <code>title</code>; and <code>images.start</code>, <code>images.middle</code> and <code>images.end</code> to select how many of each type of image you want. Configuration options provided in the URI override those in the POST request.</p>
+<p><code>POST</code> requests also parse the supplied entity, which should be of type <code>multipart/form-data</code> (to ensure non-ASCII characters work). You can set the following fields: <var>presenter</var>, <var>affiliation</var>, <var>title</var>; and <var>images.start</var>, <var>images.middle</var> and <var>images.end</var> to select how many of each type of image you want.</p>
+
+<p>If you set <var>images.order</var>, which is a comma-separated list of types, you can use other types of image &ndash; for instance, using <kbd>start,middle,detail,end</kbd>, you then need to provide values for <var>images.start</var>, <var>images.middle</var>, <var>images.detail</var> and <var>images.end</var> to give the numbers of each image type to use in the presentation.</p>
+
+<p>Configuration options provided in the URI override those in the POST request.</p>
 
     </div>
 
 <h2 id='compatibility'>1: Compatibility</h2>
 
-<p>This site should work in all browsers except Opera, which doesn't work with S5 for reasons I can't be bothered to sort out. It clearly worked at some point; I'm guessing Opera decided they'd get clever and change the way their META extensions work, so it's really their own fault. The creators of <code>evilpresentation.com</code> will not offer opinions on its compatibility with your particular business.</p>
+<p>This site should work in all browsers except Opera, which doesn't work with S5 for reasons I can't be bothered to sort out. It clearly worked at some point; I'm guessing Opera decided they'd get clever and change the way their META extensions work, so it's really their own fault. The creators of <em>evilpresentation.com</em> will not offer opinions on its compatibility with your particular business.</p>
 
     <address><a href='/'>evilpresentation.com</a> is a product of <a href='http://evilmediagroup.com/'>evilmediagroup</a>. Presentation system adapted from <a href='http://meyerweb.com/eric/tools/s5/'>S5</a> by <a href='http://meyerweb.com/eric/'>Eric Meyer</a>. We feel it necessary, for contractual reasons, to point out that &quot;this product uses the <a href='http://flickr.com/services/api/'>Flickr API</a> but is not endorsed or certified by <a href='http://flickr.com/'>Flickr</a>&quot;. Just so we're clear.</address>
   </body>
