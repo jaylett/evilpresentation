@@ -32,7 +32,7 @@ class Flickr:
 
     def find_photos_by_machine_tag(self, mtag, number):
         # FIXME: shouldn't *really* hard-code the license ids
-        data = self.call_api('flickr.photos.search', { 'sort': 'random', 'machine_tags': mtag, 'license': '4,5,6', 'per_page': number, 'privacy_filter': 1 }) # commercial use only
+        data = self.call_api('flickr.photos.search', { 'sort': 'random', 'machine_tags': mtag, 'license': '4,5,6', 'per_page': number, 'privacy_filter': 1, 'content_type': 7 }) # commercial use only, include illustrations and weird things
         photos = etree_fromstring(data)
         if photos.tag!='rsp':
             raise FlickrError('XML looks all funny (rsp missing)!')
